@@ -17,7 +17,9 @@ class Event < ApplicationRecord
   # Relationships
 
   # Validations
-  validates :billetto_id, :title, :starts_at, presence: true
-  validates :billetto_id, uniqueness: true
+  validates :billetto_id, presence: { message: "^Billetto Id should be present" }
+  validates :title, presence: { message: "^Title should be present" }
+  validates :starts_at, presence: { message: "^Starts At should be present" }
+  validates :billetto_id, uniqueness: { message: "^Billetto Id is already taken" }
   validates :upvotes_count, :downvotes_count, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 end
