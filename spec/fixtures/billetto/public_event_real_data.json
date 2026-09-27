@@ -1,0 +1,47 @@
+{"object":"list",
+ "data":[
+            {"id":"2007159",
+          "object":"public_event",
+          "kind":"regular",
+          "state":"published",
+          "title":"Christmas Gospel Night",
+          "description":
+            "🎄🎶 Christmas Gospel Night med Corallerne 🎶🎄\n\nDer er garanti for masser af&nbsp;varme, nærvær og smukke decembertoner, når Corallerne inviterer til årets store og traditionelle julekoncert.&nbsp;\n\nKoncerten bliver ledet af korleder Louise Kofoed, der med sin store erfaring og tydelige musikalitet skaber et trygt og inspirerende rum for koret. Ved tangenterne sidder Kewin Kirkeby, en dygtig pianist med en elegant og nærværende spillestil.\nGlæd jer til en stemningsfuld decemberaften, hvor musikken bringer jer helt ind i julens varme og frembringer den ægte julestemning.\n",
+          "url":
+            "https://billetto.dk/e/christmas-gospel-night-billetter-2007159?utm_campaign=websites&utm_content=DK+7433669&utm_medium=publishers&utm_source=billetto+advertising",
+          "branded_url":
+            "https://billetto.dk/e/christmas-gospel-night-billetter-2007159?utm_campaign=websites&utm_content=DK+7433669&utm_medium=publishers&utm_source=billetto+advertising",
+          "image_link":
+            "https://billetto.imgix.net/htsnpm0g9xrycx81vyqtkcgt1zqu?w=1200&h=675&fit=crop&auto=compress%2Cformat&rect=0%2C84%2C1536%2C864&s=6ccccf15654c6a962557d11f6a140946",
+          "availability":true,
+          "organiser":{"id":5279287, "name":"Anne Steffensen"},
+          "minimum_price":{"amount_in_cents":120, "currency":"DKK"},
+          "categorization":
+            {"category":"music",
+            "category_localized":"Musik",
+            "subcategory":"cultural",
+            "subcategory_localized":"Kulturel",
+            "type":"concert",
+            "type_localized":"Koncert, Forestilling, Opvisning"},
+          "location":
+            {"location_name":"Engholmkirken",
+            "address_line":"Engholm Kirkevej 1",
+            "address_line_2":null,
+            "city":"Lillerød",
+            "postal_code":"3450",
+            "country":"Danmark",
+            "country_code":"DK",
+            "macroregion":"Danmark",
+            "region":"Hovedstaden",
+            "subregion":"Nordsjælland",
+            "coordinates":{"latitude":55.862, "longitude":12.3366}},
+          "startdate":"2026-12-07T18:00:00Z",
+          "enddate":"2026-12-07T20:00:00Z",
+          "organization":{"id":1, "domain":"billetto.dk"},
+          "headliners":{"object":"list", "data":[], "has_more":false, "total":0}}
+        ],
+ "has_more":true,
+ "total":1255,
+ "url":"https://billetto.dk/api/v3/public/events?limit=100",
+ "next_url":"https://billetto.dk/api/v3/public/events?after=2006901&limit=100"
+}

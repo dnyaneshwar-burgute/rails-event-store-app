@@ -11,28 +11,31 @@ module Billetto
       end
     end
 
-    def list_public_events
+    def each_public_events_batch
       raise RequestError, "Billetto API key pair is not configured" if @api_keypair.blank?
 
-      events = []
+      return enum_for(:each_public_events_batch) unless block_given?
+
       query = { limit: PAGE_LIMIT }
       seen_cursors = []
 
       loop do
         payload = get_public_events(query)
+        raise RequestError, "Billetto response was not a list" unless payload["object"] == "list"
+
         batch = payload["data"]
         raise RequestError, "Billetto response data was not a list" unless batch.is_a?(Array)
 
-        events.concat(batch)
-        cursor = next_cursor(payload, batch)
-        break unless payload["has_more"] && cursor.present?
+        yield batch
+
+        break unless payload["has_more"]
+
+        cursor = after_cursor(payload["next_url"])
         break if seen_cursors.include?(cursor)
 
         seen_cursors << cursor
-        query = { limit: PAGE_LIMIT, starting_after: cursor }
+        query = { limit: PAGE_LIMIT, after: cursor }
       end
-
-      events
     end
 
     private
@@ -61,11 +64,15 @@ module Billetto
       raise RequestError, "Billetto response was not valid JSON"
     end
 
-    def next_cursor(payload, batch)
-      payload["starting_after"].presence ||
-        payload["next_starting_after"].presence ||
-        payload.dig("paging", "next").presence ||
-        batch.last&.dig("id")&.to_s
+    def after_cursor(next_url)
+      raise RequestError, "Billetto response was missing next_url" if next_url.blank?
+
+      cursor = URI.decode_www_form(URI.parse(next_url).query.to_s).to_h["after"].presence
+      raise RequestError, "Billetto next_url was missing an after cursor" if cursor.blank?
+
+      cursor
+    rescue URI::InvalidURIError
+      raise RequestError, "Billetto next_url was invalid"
     end
   end
 end

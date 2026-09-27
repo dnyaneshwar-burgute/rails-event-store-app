@@ -1,5 +1,6 @@
 [
   {
+    "object": "list",
     "data": [
       {
         "id": "323509ce-43fe-4a36-a037-c5ca924e3899",
@@ -65,6 +66,8 @@
         }
       }
     ],
-    "has_more": false
+    "has_more": false,
+    "total": 5,
+    "url": "https://billetto.test/api/v3/public/events?limit=5"
   }
 ]

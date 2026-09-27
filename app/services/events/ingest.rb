@@ -15,23 +15,27 @@ module Events
       updated = 0
       skipped = []
 
-      @client.list_public_events.each do |item|
-        attributes = attributes_for(item)
-        if attributes.nil?
-          skipped << skip_label(item)
-          next
-        end
+      @client.each_public_events_batch do |batch|
+        ActiveRecord::Base.transaction do
+          batch.each do |item|
+            attributes = attributes_for(item)
+            if attributes.nil?
+              skipped << skip_label(item)
+              next
+            end
 
-        record = Event.find_or_initialize_by(billetto_id: attributes[:billetto_id])
-        new_record = record.new_record?
-        record.assign_attributes(attributes.slice(*CONTENT_ATTRIBUTES))
-        unless record.valid?
-          skipped << attributes[:billetto_id]
-          next
-        end
+            record = Event.find_or_initialize_by(billetto_id: attributes[:billetto_id])
+            new_record = record.new_record?
+            record.assign_attributes(attributes.slice(*CONTENT_ATTRIBUTES))
+            unless record.valid?
+              skipped << attributes[:billetto_id]
+              next
+            end
 
-        record.save!
-        new_record ? created += 1 : updated += 1
+            record.save!
+            new_record ? created += 1 : updated += 1
+          end
+        end
       end
 
       Result.new(created: created, updated: updated, skipped: skipped)

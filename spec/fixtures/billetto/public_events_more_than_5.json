@@ -1,5 +1,6 @@
 [
   {
+    "object": "list",
     "data": [
       {
         "id": "323509ce-43fe-4a36-a037-c5ca924e3899",
@@ -66,9 +67,12 @@
       }
     ],
     "has_more": true,
-    "starting_after": "33333333-3333-4333-8333-333333333333"
+    "total": 7,
+    "url": "https://billetto.test/api/v3/public/events?limit=5",
+    "next_url": "https://billetto.test/api/v3/public/events?after=33333333-3333-4333-8333-333333333333&limit=5"
   },
   {
+    "object": "list",
     "data": [
       {
         "id": "44444444-4444-4444-8444-444444444444",
@@ -97,6 +101,8 @@
         }
       }
     ],
-    "has_more": false
+    "has_more": false,
+    "total": 7,
+    "url": "https://billetto.test/api/v3/public/events?after=33333333-3333-4333-8333-333333333333&limit=5"
   }
 ]
