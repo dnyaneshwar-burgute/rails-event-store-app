@@ -1,0 +1,17 @@
+<% current_vote = event.vote_for(clerk&.user_id) %>
+
+<div class="event-votes">
+  <p class="vote-counts">
+    <span><%= pluralize(event.upvotes_count, "like") %></span>
+    <span><%= pluralize(event.downvotes_count, "dislike") %></span>
+  </p>
+
+  <% if clerk&.user? %>
+    <div class="vote-actions">
+      <%= button_to "Like", event_votes_path(event), params: { choice: "upvote" }, class: class_names("vote-button", "is-selected": current_vote&.choice == "upvote") %>
+      <%= button_to "Dislike", event_votes_path(event), params: { choice: "downvote" }, class: class_names("vote-button", "is-selected": current_vote&.choice == "downvote") %>
+    </div>
+  <% elsif clerk&.sign_in_url.present? %>
+    <p class="vote-signin"><%= link_to "Sign in to vote", clerk.sign_in_url %></p>
+  <% end %>
+</div>

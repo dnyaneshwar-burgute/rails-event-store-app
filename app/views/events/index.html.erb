@@ -28,6 +28,7 @@
             <% if event.url.present? %>
               <p><%= link_to "View on Billetto", event.url, target: "_blank", rel: "noopener" %></p>
             <% end %>
+            <%= render "votes", event: event %>
           </div>
         </li>
       <% end %>
