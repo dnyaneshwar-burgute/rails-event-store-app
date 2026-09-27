@@ -66,5 +66,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "shoulda-matchers"
+  gem "rails-controller-testing"
 end
 gem "rails_event_store", "~> 3.1.0"

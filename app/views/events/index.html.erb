@@ -1,0 +1,36 @@
+<% content_for(:title) { "Events" } %>
+
+<section class="events-page">
+  <header class="page-header">
+    <h1>Public events</h1>
+    <p>Events imported from Billetto. Likes and dislikes are stored with Rails Event Store.</p>
+  </header>
+
+  <% if @events.empty? %>
+    <p class="empty-state">No events yet. Run <code>rails db:seed</code> for sample data</p>
+  <% else %>
+    <ul class="event-list">
+      <% @events.each do |event| %>
+        <li class="event-card">
+          <% if event.image_url.present? %>
+            <%= image_tag event.image_url, alt: event.title, class: "event-image" %>
+          <% else %>
+            <div class="event-image event-image-missing" aria-hidden="true"></div>
+          <% end %>
+
+          <div class="event-body">
+            <h2><%= event.title %></h2>
+            <p class="event-date"><%= event.starts_at.strftime("%-d %B %Y, %H:%M") %></p>
+            <% if event_location(event).present? %>
+              <p class="event-location"><%= event_location(event) %></p>
+            <% end %>
+            <p class="event-description"><%= truncate(event.brief_description, length: 280) %></p>
+            <% if event.url.present? %>
+              <p><%= link_to "View on Billetto", event.url, target: "_blank", rel: "noopener" %></p>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>
