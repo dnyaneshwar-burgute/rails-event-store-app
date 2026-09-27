@@ -1,7 +1,7 @@
 module Billetto
   class Client
     DEFAULT_BASE_URL = "https://billetto.dk/api/v3"
-    PAGE_LIMIT = 100
+    PAGE_LIMIT = Rails.env.test? ? 5 : 100
 
     def initialize(api_keypair: ENV["BILLETTO_API_KEYPAIR"], base_url: ENV.fetch("BILLETTO_API_BASE", DEFAULT_BASE_URL), http: nil)
       @api_keypair = api_keypair
