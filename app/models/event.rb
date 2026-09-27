@@ -15,6 +15,7 @@
 # end
 class Event < ApplicationRecord
   # Relationships
+  has_many :votes, dependent: :destroy
 
   # Validations
   validates :billetto_id, presence: { message: "^Billetto Id should be present" }
@@ -26,5 +27,15 @@ class Event < ApplicationRecord
   # Public Methods
   def brief_description
     description.presence || "No description"
+  end
+
+  def vote_for(user_id)
+    return if user_id.blank?
+
+    if votes.loaded?
+      votes.find { |vote| vote.clerk_user_id == user_id }
+    else
+      votes.find_by(clerk_user_id: user_id)
+    end
   end
 end
