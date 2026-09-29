@@ -21,6 +21,15 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <% if clerk&.user? && clerk_js_src.present? %>
+      <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="<%= ENV.fetch("CLERK_PUBLISHABLE_KEY") %>"
+        src="<%= clerk_js_src %>"
+        type="text/javascript">
+      </script>
+    <% end %>
   </head>
 
   <body>
