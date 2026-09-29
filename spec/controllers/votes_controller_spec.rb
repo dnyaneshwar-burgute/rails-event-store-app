@@ -6,13 +6,7 @@ RSpec.describe VotesController, type: :controller do
 
   describe "POST create" do
     context "when the user is signed in" do
-      before do
-        request.env["clerk"] = instance_double(
-          Clerk::Proxy,
-          session: { "sub" => user_id },
-          user_id: user_id
-        )
-      end
+      before { stub_clerk_auth(user_id: user_id) }
 
       it "records an upvote and redirects to the events index" do
         post :create, params: { event_id: event.id, choice: "upvote" }
@@ -48,13 +42,7 @@ RSpec.describe VotesController, type: :controller do
     end
 
     context "when the user is signed out" do
-      before do
-        request.env["clerk"] = instance_double(
-          Clerk::Proxy,
-          session: nil,
-          sign_in_url: "https://example.test/sign-in"
-        )
-      end
+      before { stub_unauthenticated_clerk }
 
       it "redirects to the Clerk sign-in url" do
         post :create, params: { event_id: event.id, choice: "upvote" }
