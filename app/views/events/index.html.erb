@@ -2,8 +2,15 @@
 
 <section class="events-page">
   <header class="page-header">
-    <h1>Public events</h1>
-    <p>Events imported from Billetto. Likes and dislikes are stored with Rails Event Store.</p>
+    <div>
+      <h1>Public events</h1>
+      <p>Events imported from Billetto. Likes and dislikes are stored with Rails Event Store.</p>
+    </div>
+    <% if clerk&.user? %>
+      <button type="button" class="sign-out-button" data-controller="clerk-session" data-action="click->clerk-session#signOut">
+        Sign out
+      </button>
+    <% end %>
   </header>
 
   <% if @events.empty? %>

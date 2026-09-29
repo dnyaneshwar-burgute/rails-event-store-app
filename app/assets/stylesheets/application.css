@@ -60,9 +60,33 @@ a { color: var(--accent); }
   padding: 1.5rem;
 }
 
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.page-header > div {
+  flex: 1;
+  min-width: 0;
+}
+
 .page-header h1 {
   margin: 0 0 0.25rem;
   font-size: 2rem;
+}
+
+.sign-out-button {
+  flex: none;
+  margin-left: auto;
+  margin-top: 0.35rem;
+  border: 1px solid var(--line);
+  background: white;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font: inherit;
+  cursor: pointer;
 }
 
 .page-header p,
