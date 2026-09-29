@@ -16,7 +16,7 @@ RSpec.describe EventsController, type: :controller do
 
     it "assigns events" do
       get :index
-      expect(assigns(:events).pluck(:id)).to eq([event1.id, event2.id])
+      expect(assigns(:events).pluck(:id)).to eq([ event1.id, event2.id ])
     end
   end
 end
