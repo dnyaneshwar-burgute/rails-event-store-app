@@ -1,4 +1,13 @@
 module ApplicationHelper
+  def clerk_display_name
+    user = clerk&.user
+    return unless user
+
+    [ user.first_name, user.last_name ].compact_blank.join(" ").presence ||
+      user.username.presence ||
+      clerk_primary_email(user)
+  end
+
   def clerk_js_src
     host = clerk_frontend_api_host
     return if host.blank?
@@ -7,6 +16,12 @@ module ApplicationHelper
   end
 
   private
+
+  def clerk_primary_email(user)
+    emails = Array(user.email_addresses)
+    primary = emails.find { |email| email.id == user.primary_email_address_id }
+    (primary || emails.first)&.email_address
+  end
 
   # Clerk publishable keys encode the Frontend API host as base64 after the environment prefix.
   def clerk_frontend_api_host
