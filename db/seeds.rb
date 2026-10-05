@@ -45,4 +45,3 @@ event4 = Event.create(
   location_name: "Jayanagar & Malleshwaram",
   city: "Pune"
 )
-

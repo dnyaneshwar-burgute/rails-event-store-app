@@ -9,6 +9,6 @@ class ApplicationController < ActionController::Base
   private
 
   def require_clerk_session!
-    redirect_to clerk.sign_in_url unless clerk.session
+    redirect_to clerk.sign_in_url, allow_other_host: true unless clerk.session
   end
 end

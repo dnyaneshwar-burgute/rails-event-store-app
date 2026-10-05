@@ -39,6 +39,9 @@ gem "thruster", require: false
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
+# Rails Event Store for event sourcing
+gem "rails_event_store", "~> 3.1.0"
+# Wrapper for HTTP requests
 gem "faraday"
 # Clerk session authentication
 gem "clerk-sdk-ruby", require: "clerk"
@@ -72,4 +75,3 @@ group :test do
   gem "shoulda-matchers"
   gem "rails-controller-testing"
 end
-gem "rails_event_store", "~> 3.1.0"

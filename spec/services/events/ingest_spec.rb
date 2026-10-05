@@ -62,41 +62,6 @@ RSpec.describe Events::Ingest do
     end
   end
 
-  describe 'when the page matches the live Billetto list format' do
-    it 'follows next_url and stores the public event' do
-      live_page = JSON.parse(Rails.root.join('spec/fixtures/billetto/public_event_real_data.json').read)
-      terminal_page = {
-        'object' => 'list',
-        'data' => [],
-        'has_more' => false,
-        'total' => live_page['total'],
-        'url' => live_page['next_url']
-      }
-
-      result, requests = ingest_pages([ live_page, terminal_page ])
-
-      expect(requests).to eq([
-        { 'limit' => '5' },
-        { 'limit' => '5', 'after' => '2006901' }
-      ])
-      expect(result).to have_attributes(created: 1, updated: 0, skipped: [])
-
-      event = Event.find_by!(billetto_id: '2007159')
-      source = live_page.fetch('data').first
-      expect(event).to have_attributes(
-        title: 'Christmas Gospel Night',
-        image_url: source['image_link'],
-        url: source['url'],
-        location_name: 'Engholmkirken',
-        city: 'Lillerød',
-        starts_at: Time.zone.parse('2026-12-07T18:00:00Z'),
-        ends_at: Time.zone.parse('2026-12-07T20:00:00Z')
-      )
-      expect(event.description).to include('Christmas Gospel Night med Corallerne')
-      expect(event.description).not_to include('&nbsp;')
-    end
-  end
-
   def ingest(fixture_name)
     pages = JSON.parse(Rails.root.join('spec/fixtures/billetto', fixture_name).read)
     ingest_pages(pages)

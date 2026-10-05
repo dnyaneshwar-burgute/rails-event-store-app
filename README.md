@@ -19,6 +19,11 @@ Things you may want to cover:
 
   bundle install
 
+* Add a design-choices/assumptions
+
+  As vote model is having the choices upvote for like and downvote for the dislike
+  upvote: Like
+  downvote: DisLike
 
 * Configuration
 
@@ -34,7 +39,7 @@ Things you may want to cover:
 
 * How to run the test suite
 
-  rspec spec/services/events/ingest_spec.rb
+  rspec spec/
 
 * Services (job queues, cache servers, search engines, etc.)
 
