@@ -40,7 +40,7 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
 # Rails Event Store for event sourcing
-gem "rails_event_store", "~> 3.1.0"
+gem "rails_event_store", "~> 3.2.0"
 # State machines for ActiveRecord models
 gem "aasm"
 # Wrapper for HTTP requests
