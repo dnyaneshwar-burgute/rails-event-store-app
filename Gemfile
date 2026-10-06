@@ -41,6 +41,8 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 # Rails Event Store for event sourcing
 gem "rails_event_store", "~> 3.1.0"
+# State machines for ActiveRecord models
+gem "aasm"
 # Wrapper for HTTP requests
 gem "faraday"
 # Clerk session authentication

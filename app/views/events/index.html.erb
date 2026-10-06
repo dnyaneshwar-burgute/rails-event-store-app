@@ -5,6 +5,7 @@
     <div>
       <h1>Public events</h1>
       <p>Events imported from Billetto. Likes and dislikes are stored with Rails Event Store.</p>
+      <p><%= link_to "Event sync history", event_sync_histories_path %></p>
     </div>
     <% if clerk&.user? %>
       <div class="account-menu">
