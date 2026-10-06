@@ -1,0 +1,50 @@
+<% content_for(:title) { "Event sync history" } %>
+
+<section class="events-page">
+  <header class="page-header">
+    <div>
+      <h1>Event sync history</h1>
+      <p>Import public events from Billetto. A new sync can run two hours after the last one.</p>
+      <p><%= link_to "Back to events", events_path %></p>
+    </div>
+
+    <div class="sync-actions">
+      <% if @sync_on_cooldown %>
+        <button type="button" class="sync-button" disabled>Sync events</button>
+        <p class="sync-cooldown">Sync is available again at <%= sync_time(@cooldown_ends_at) %>.</p>
+      <% else %>
+        <%= button_to "Sync events", event_sync_histories_path, class: "sync-button" %>
+      <% end %>
+    </div>
+  </header>
+
+  <% if notice.present? %>
+    <p class="flash flash-notice"><%= notice %></p>
+  <% end %>
+  <% if alert.present? %>
+    <p class="flash flash-alert"><%= alert %></p>
+  <% end %>
+
+  <% if @event_sync_histories.empty? %>
+    <p class="empty-state">No syncs yet.</p>
+  <% else %>
+    <table class="sync-history">
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Started</th>
+          <th>Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @event_sync_histories.each do |history| %>
+          <tr>
+            <td class="status-<%= history.status %>"><%= history.status_label %></td>
+            <td><%= sync_time(history.created_at) %></td>
+            <td><%= sync_time(history.updated_at) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</section>

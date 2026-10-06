@@ -41,6 +41,8 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 # Rails Event Store for event sourcing
 gem "rails_event_store", "~> 3.1.0"
+# State machines for ActiveRecord models
+gem "aasm"
 # Wrapper for HTTP requests
 gem "faraday"
 # Clerk session authentication
@@ -55,7 +57,7 @@ group :development, :test do
   gem "bundler-audit", require: false
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem "brakeman", require: false
+  gem "brakeman", "~> 8.1.0", require: false
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
