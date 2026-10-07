@@ -28,14 +28,22 @@ RSpec.describe Voting::CastVote do
     expect(event.votes.where(clerk_user_id: user_id).pluck(:choice)).to eq([ 'downvote' ])
   end
 
-  it 'leaves counts and the vote unchanged when the same choice is cast again' do
+  it 'retracts an upvote when the same user likes again' do
+    cast_vote.call(event: event, user_id: user_id, choice: 'upvote')
     cast_vote.call(event: event, user_id: user_id, choice: 'upvote')
 
-    expect {
-      cast_vote.call(event: event, user_id: user_id, choice: 'upvote')
-    }.not_to change { Rails.configuration.event_store.read.count }
+    expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 0)
+    expect(event.votes.where(clerk_user_id: user_id)).to be_empty
+    retracted = Rails.configuration.event_store.read.stream("Voting::Event$#{event.id}").to_a.last
+    expect(retracted).to be_a(Voting::VoteRetracted)
+    expect(retracted.data).to include(choice: 'upvote')
+  end
 
-    expect(event.reload).to have_attributes(upvotes_count: 1, downvotes_count: 0)
-    expect(event.votes.where(clerk_user_id: user_id).count).to eq(1)
+  it 'retracts a downvote when the same user dislikes again' do
+    cast_vote.call(event: event, user_id: user_id, choice: 'downvote')
+    cast_vote.call(event: event, user_id: user_id, choice: 'downvote')
+
+    expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 0)
+    expect(event.votes.where(clerk_user_id: user_id)).to be_empty
   end
 end

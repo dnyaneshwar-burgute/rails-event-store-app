@@ -55,6 +55,36 @@ RSpec.describe "Voting on public events", type: :system, capybara_feature: true 
     within(".event-card", text: event.title) do
       expect(page).to have_content("0 likes")
       expect(page).to have_content("1 dislike")
+      click_button "Dislike"
+    end
+
+    within(".event-card", text: event.title) do
+      expect(page).to have_content("0 likes")
+      expect(page).to have_content("0 dislikes")
+    end
+
+    click_sign_out
+    expect(page).to have_link("Sign up")
+  end
+
+  scenario "retracts a like and returns the count to zero" do
+    click_link "Sign in to vote", match: :first
+    expect(page).to have_button("Sign out")
+
+    event = @events.first
+    within(".event-card", text: event.title) do
+      click_button "Like"
+    end
+
+    within(".event-card", text: event.title) do
+      expect(page).to have_content("1 like")
+      expect(page).to have_css(".vote-button.is-selected", text: "Like")
+      click_button "Like"
+    end
+
+    within(".event-card", text: event.title) do
+      expect(page).to have_content("0 likes")
+      expect(page).to have_no_css(".vote-button.is-selected")
     end
 
     click_sign_out
