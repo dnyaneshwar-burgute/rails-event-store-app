@@ -7,9 +7,11 @@ module Voting
       raise ArgumentError, "User is required" if user_id.blank?
 
       current = event.votes.find_by(clerk_user_id: user_id)
-      return event if current&.choice == choice
-
-      domain_event = vote_event(choice).new(data: { event_id: event.id, user_id: user_id })
+      domain_event = if current&.choice == choice
+        VoteRetracted.new(data: { event_id: event.id, user_id: user_id, choice: choice })
+      else
+        vote_event(choice).new(data: { event_id: event.id, user_id: user_id })
+      end
       stream_name = "Voting::Event$#{event.id}"
 
       ApplicationRecord.transaction do

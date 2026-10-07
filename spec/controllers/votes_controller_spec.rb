@@ -24,6 +24,16 @@ RSpec.describe VotesController, type: :controller do
         expect(event.votes.find_by!(clerk_user_id: user_id).choice).to eq("downvote")
       end
 
+      it "retracts the vote when the same choice is cast again" do
+        post :create, params: { event_id: event.id, choice: "upvote" }
+        post :create, params: { event_id: event.id, choice: "upvote" }
+
+        expect(response).to redirect_to(events_path)
+        expect(flash[:notice]).to eq("Vote retracted.")
+        expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 0)
+        expect(event.votes).to be_empty
+      end
+
       it "redirects with an alert when the choice is invalid" do
         post :create, params: { event_id: event.id, choice: "maybe" }
 

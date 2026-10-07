@@ -21,7 +21,7 @@ Rails.configuration.to_prepare do
 
     store.subscribe(
       Voting::UpdateVoteCounts.new,
-      to: [ Voting::EventUpvoted, Voting::EventDownvoted ]
+      to: [ Voting::EventUpvoted, Voting::EventDownvoted, Voting::VoteRetracted ]
     )
 
     store.subscribe_to_all_events(RailsEventStore::LinkByEventType.new)

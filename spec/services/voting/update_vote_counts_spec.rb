@@ -59,6 +59,41 @@ RSpec.describe Voting::UpdateVoteCounts do
     )
   end
 
+  it "removes an upvote and decrements upvotes_count" do
+    update_vote_counts.call(upvoted(user_id))
+    update_vote_counts.call(retracted(user_id))
+
+    expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 0)
+    expect(event.votes).to be_empty
+  end
+
+  it "removes a downvote and decrements downvotes_count" do
+    update_vote_counts.call(downvoted(user_id))
+    update_vote_counts.call(retracted(user_id, choice: "downvote"))
+
+    expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 0)
+    expect(event.votes).to be_empty
+  end
+
+  it "leaves other voters in place when one user retracts" do
+    other_user_id = SecureRandom.uuid
+
+    update_vote_counts.call(upvoted(user_id))
+    update_vote_counts.call(downvoted(other_user_id))
+    update_vote_counts.call(retracted(user_id))
+
+    expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 1)
+    expect(event.votes.pluck(:clerk_user_id, :choice)).to contain_exactly(
+      [ other_user_id, "downvote" ]
+    )
+  end
+
+  it "leaves counts unchanged when the user has no vote to retract" do
+    expect { update_vote_counts.call(retracted(user_id)) }.not_to change(Vote, :count)
+
+    expect(event.reload).to have_attributes(upvotes_count: 0, downvotes_count: 0)
+  end
+
   it "raises when the event does not exist" do
     missing = Voting::EventUpvoted.new(data: { event_id: 0, user_id: user_id })
 
@@ -81,5 +116,11 @@ RSpec.describe Voting::UpdateVoteCounts do
 
   def downvoted(clerk_user_id)
     Voting::EventDownvoted.new(data: { event_id: event.id, user_id: clerk_user_id })
+  end
+
+  def retracted(clerk_user_id, choice: "upvote")
+    Voting::VoteRetracted.new(
+      data: { event_id: event.id, user_id: clerk_user_id, choice: choice }
+    )
   end
 end

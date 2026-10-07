@@ -3,8 +3,13 @@ module Voting
     def call(domain_event)
       event = Event.find(domain_event.data.fetch(:event_id))
       user_id = domain_event.data.fetch(:user_id)
-      choice = choice_for(domain_event)
 
+      if domain_event.is_a?(VoteRetracted)
+        remove_vote(event, user_id)
+        return
+      end
+
+      choice = choice_for(domain_event)
       vote = event.votes.find_or_initialize_by(clerk_user_id: user_id)
       previous = vote.choice
       return if previous == choice
@@ -17,6 +22,17 @@ module Voting
     end
 
     private
+
+    def remove_vote(event, user_id)
+      vote = event.votes.find_by(clerk_user_id: user_id)
+      return if vote.nil?
+
+      ApplicationRecord.transaction do
+        column = count_column(vote.choice)
+        vote.destroy!
+        Event.update_counters(event.id, column => -1)
+      end
+    end
 
     def choice_for(domain_event)
       case domain_event
